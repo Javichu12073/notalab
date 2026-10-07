@@ -1,0 +1,568 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Calculadora de Nota Necesaria | NotaLab"
+  description="Calcula qué nota necesitas sacar en tu próximo examen para alcanzar la media que quieres."
+>
+  <header class="header">
+    <a href="/" class="logo">
+      <span>Nota</span>Lab
+    </a>
+
+    <a href="/" class="back">← Volver al inicio</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="badge">🎯 CALCULADORA DE NOTAS</div>
+
+      <h1>Calculadora de nota necesaria</h1>
+
+      <p>
+        Descubre qué nota necesitas sacar en lo que queda para alcanzar tu
+        objetivo.
+      </p>
+    </section>
+
+    <section class="calculator">
+      <div class="card">
+        <h2>Introduce tus datos</h2>
+
+        <div class="field">
+          <label for="currentGrade">
+            Nota actual
+            <span>0 - 10</span>
+          </label>
+
+          <input
+            type="number"
+            id="currentGrade"
+            min="0"
+            max="10"
+            step="0.01"
+            placeholder="Ej. 7,50"
+          />
+        </div>
+
+        <div class="field">
+          <label for="currentWeight">
+            Porcentaje ya evaluado
+            <span>1 - 99%</span>
+          </label>
+
+          <input
+            type="number"
+            id="currentWeight"
+            min="1"
+            max="99"
+            step="1"
+            placeholder="Ej. 60"
+          />
+        </div>
+
+        <div class="field">
+          <label for="targetGrade">
+            Nota final que quieres conseguir
+            <span>0 - 10</span>
+          </label>
+
+          <input
+            type="number"
+            id="targetGrade"
+            min="0"
+            max="10"
+            step="0.01"
+            placeholder="Ej. 8,00"
+          />
+        </div>
+      </div>
+
+      <button type="button" id="calculate" class="calculate">
+        Calcular nota necesaria
+      </button>
+
+      <div id="error" class="error"></div>
+
+      <div id="result" class="result">
+        <p class="result-label">Necesitas sacar</p>
+
+        <strong id="neededGrade">0,00</strong>
+
+        <span>/ 10</span>
+
+        <p id="resultMessage" class="result-message"></p>
+      </div>
+    </section>
+
+    <section class="info">
+      <h2>¿Cómo se calcula?</h2>
+
+      <p>
+        La calculadora tiene en cuenta tu nota actual, el porcentaje de la
+        asignatura que ya está evaluado y la nota final que quieres conseguir.
+      </p>
+
+      <div class="formula">
+        <strong>Fórmula</strong>
+
+        <span>
+          Nota necesaria = (Objetivo − Nota actual × porcentaje evaluado) ÷
+          porcentaje restante
+        </span>
+      </div>
+
+      <p>
+        Por ejemplo, si tienes un 7 en el 60% de la asignatura y quieres
+        terminar con un 8:
+      </p>
+
+      <div class="example">
+        <strong>
+          (8 − 7 × 0,60) ÷ 0,40 = 9,50
+        </strong>
+      </div>
+
+      <p>
+        En este caso necesitarías sacar un <strong>9,50</strong> en el
+        porcentaje restante para conseguir un 8 final.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-logo">
+      <span>Nota</span>Lab
+    </div>
+
+    <p>Herramientas gratuitas para estudiantes.</p>
+
+    <div class="footer-links">
+      <a href="/">Inicio</a>
+      <a href="/calculadora-nota-media">Nota media</a>
+      <a href="/media-ponderada">Media ponderada</a>
+      <a href="/simulador-notas">Simulador</a>
+      <a href="/calculadora-pau">Calculadora PAU</a>
+    </div>
+
+    <small>© 2026 NotaLab</small>
+  </footer>
+
+  <script>
+    const currentGrade = document.getElementById(
+      "currentGrade"
+    ) as HTMLInputElement;
+
+    const currentWeight = document.getElementById(
+      "currentWeight"
+    ) as HTMLInputElement;
+
+    const targetGrade = document.getElementById(
+      "targetGrade"
+    ) as HTMLInputElement;
+
+    const calculate = document.getElementById(
+      "calculate"
+    );
+
+    const error = document.getElementById("error");
+
+    const result = document.getElementById("result");
+
+    const neededGrade = document.getElementById(
+      "neededGrade"
+    );
+
+    const resultMessage = document.getElementById(
+      "resultMessage"
+    );
+
+    calculate?.addEventListener("click", () => {
+      error!.textContent = "";
+      result!.classList.remove("show");
+
+      if (
+        currentGrade.value === "" ||
+        currentWeight.value === "" ||
+        targetGrade.value === ""
+      ) {
+        error!.textContent =
+          "Completa todos los campos para realizar el cálculo.";
+
+        return;
+      }
+
+      const current = Number(currentGrade.value);
+      const evaluated = Number(currentWeight.value);
+      const target = Number(targetGrade.value);
+
+      if (current < 0 || current > 10) {
+        error!.textContent =
+          "La nota actual debe estar entre 0 y 10.";
+
+        return;
+      }
+
+      if (evaluated < 1 || evaluated > 99) {
+        error!.textContent =
+          "El porcentaje evaluado debe estar entre 1% y 99%.";
+
+        return;
+      }
+
+      if (target < 0 || target > 10) {
+        error!.textContent =
+          "La nota objetivo debe estar entre 0 y 10.";
+
+        return;
+      }
+
+      const remaining = 100 - evaluated;
+
+      const required =
+        (target - current * (evaluated / 100)) /
+        (remaining / 100);
+
+      if (required <= 0) {
+        neededGrade!.textContent = "0,00";
+
+        resultMessage!.textContent =
+          "Ya has alcanzado la nota objetivo. Incluso con un 0 en lo que queda, mantendrías el objetivo.";
+
+        result!.classList.add("show");
+
+        return;
+      }
+
+      if (required > 10) {
+        neededGrade!.textContent = "10+";
+
+        resultMessage!.textContent =
+          "No es posible alcanzar esa nota con el porcentaje que queda por evaluar.";
+
+        result!.classList.add("show");
+
+        return;
+      }
+
+      neededGrade!.textContent = required
+        .toFixed(2)
+        .replace(".", ",");
+
+      resultMessage!.textContent =
+        `Necesitas al menos un ${required
+          .toFixed(2)
+          .replace(".", ",")} en el ${remaining}% restante.`;
+
+      result!.classList.add("show");
+    });
+  </script>
+
+  <style>
+    :global(*) {
+      box-sizing: border-box;
+    }
+
+    :global(body) {
+      margin: 0;
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    .header {
+      height: 72px;
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 7%;
+    }
+
+    .logo,
+    .footer-logo {
+      text-decoration: none;
+      color: #0f172a;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .logo span,
+    .footer-logo span {
+      color: #16a085;
+    }
+
+    .back {
+      color: #475569;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .back:hover {
+      color: #16a085;
+    }
+
+    main {
+      max-width: 850px;
+      margin: auto;
+      padding: 55px 20px 80px;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e8f8f5;
+      color: #12806a;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1.05;
+      margin: 0 0 16px;
+      letter-spacing: -1.5px;
+    }
+
+    .hero p {
+      color: #64748b;
+      font-size: 17px;
+      max-width: 620px;
+      margin: auto;
+      line-height: 1.6;
+    }
+
+    .calculator {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 8px 25px rgba(15, 23, 42, 0.04);
+    }
+
+    .card h2 {
+      margin: 0 0 25px;
+      font-size: 20px;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    label span {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      height: 48px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 0 13px;
+      font-size: 15px;
+      background: white;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #16a085;
+      box-shadow: 0 0 0 3px rgba(22, 160, 133, 0.1);
+    }
+
+    .calculate {
+      width: 100%;
+      height: 56px;
+      border: 0;
+      border-radius: 13px;
+      background: #16a085;
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(22, 160, 133, 0.2);
+    }
+
+    .calculate:hover {
+      background: #128f76;
+    }
+
+    .error {
+      min-height: 20px;
+      color: #dc2626;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .result {
+      display: none;
+      background: #0f172a;
+      color: white;
+      border-radius: 20px;
+      padding: 35px 25px;
+      text-align: center;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .result-label {
+      color: #94a3b8;
+      margin: 0 0 10px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .result > strong {
+      font-size: 58px;
+      line-height: 1;
+    }
+
+    .result > span {
+      color: #94a3b8;
+      font-size: 15px;
+    }
+
+    .result-message {
+      max-width: 600px;
+      margin: 22px auto 0;
+      color: #cbd5e1;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .info {
+      margin-top: 50px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 30px;
+    }
+
+    .info h2 {
+      margin-top: 0;
+    }
+
+    .info p {
+      color: #64748b;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .formula {
+      background: #f8fafc;
+      border-left: 4px solid #16a085;
+      padding: 16px;
+      margin: 20px 0;
+      border-radius: 0 10px 10px 0;
+    }
+
+    .formula strong {
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    .formula span {
+      color: #475569;
+      font-size: 14px;
+    }
+
+    .example {
+      background: #e8f8f5;
+      color: #12806a;
+      padding: 16px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    footer {
+      border-top: 1px solid #e2e8f0;
+      background: white;
+      padding: 35px 20px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 22px;
+    }
+
+    footer p {
+      color: #64748b;
+      margin: 8px 0 20px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .footer-links a {
+      color: #64748b;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .footer-links a:hover {
+      color: #16a085;
+    }
+
+    footer small {
+      color: #94a3b8;
+    }
+
+    @media (max-width: 600px) {
+      .header {
+        padding: 0 20px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .info {
+        padding: 22px;
+      }
+    }
+  </style>
+</Layout>

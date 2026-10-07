@@ -1,0 +1,685 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Calculadora de Media Ponderada | NotaLab"
+  description="Calcula tu media ponderada fácilmente. Introduce tus notas y porcentajes y obtén el resultado al instante."
+>
+  <header class="header">
+    <a href="/" class="logo">
+      <span>Nota</span>Lab
+    </a>
+
+    <a href="/" class="back">← Volver al inicio</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="badge">⚖️ CALCULADORA DE NOTAS</div>
+
+      <h1>Calculadora de media ponderada</h1>
+
+      <p>
+        Introduce tus notas y el porcentaje que representa cada una para
+        calcular tu media ponderada.
+      </p>
+    </section>
+
+    <section class="calculator">
+      <div class="card">
+        <h2>Tus asignaturas</h2>
+
+        <div id="subjects">
+          <div class="subject">
+            <input
+              type="text"
+              class="subject-name"
+              placeholder="Nombre de la asignatura"
+            />
+
+            <input
+              type="number"
+              class="subject-grade"
+              min="0"
+              max="10"
+              step="0.01"
+              placeholder="Nota"
+            />
+
+            <input
+              type="number"
+              class="subject-weight"
+              min="0"
+              max="100"
+              step="0.01"
+              placeholder="%"
+            />
+
+            <button type="button" class="remove">×</button>
+          </div>
+
+          <div class="subject">
+            <input
+              type="text"
+              class="subject-name"
+              placeholder="Nombre de la asignatura"
+            />
+
+            <input
+              type="number"
+              class="subject-grade"
+              min="0"
+              max="10"
+              step="0.01"
+              placeholder="Nota"
+            />
+
+            <input
+              type="number"
+              class="subject-weight"
+              min="0"
+              max="100"
+              step="0.01"
+              placeholder="%"
+            />
+
+            <button type="button" class="remove">×</button>
+          </div>
+        </div>
+
+        <button type="button" id="addSubject" class="add">
+          + Añadir asignatura
+        </button>
+
+        <div class="weight-info">
+          Porcentaje total:
+          <strong id="totalWeight">0%</strong>
+        </div>
+      </div>
+
+      <button type="button" id="calculate" class="calculate">
+        Calcular media ponderada
+      </button>
+
+      <div id="error" class="error"></div>
+
+      <div id="result" class="result">
+        <p>Tu media ponderada es</p>
+
+        <strong id="average">0,00</strong>
+
+        <span>/ 10</span>
+      </div>
+    </section>
+
+    <section class="info">
+      <h2>¿Cómo se calcula una media ponderada?</h2>
+
+      <p>
+        Una media ponderada tiene en cuenta que algunas notas pueden tener
+        más importancia que otras.
+      </p>
+
+      <div class="formula">
+        <strong>Fórmula</strong>
+
+        <span>
+          Media = (Nota × porcentaje) + (Nota × porcentaje) + ...
+        </span>
+      </div>
+
+      <p>
+        Por ejemplo, si un examen vale un 60% y tienes un 8, mientras que un
+        trabajo vale un 40% y tienes un 9:
+      </p>
+
+      <div class="example">
+        <strong>(8 × 0,60) + (9 × 0,40) = 8,40</strong>
+      </div>
+
+      <p>
+        Recuerda que todos los porcentajes deben sumar exactamente
+        <strong>100%</strong>.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-logo">
+      <span>Nota</span>Lab
+    </div>
+
+    <p>Herramientas gratuitas para estudiantes.</p>
+
+    <div class="footer-links">
+      <a href="/">Inicio</a>
+      <a href="/calculadora-nota-media">Nota media</a>
+      <a href="/calculadora-nota-necesaria">Nota necesaria</a>
+      <a href="/simulador-notas">Simulador</a>
+      <a href="/calculadora-pau">Calculadora PAU</a>
+    </div>
+
+    <small>© 2026 NotaLab</small>
+  </footer>
+
+  <script>
+    const subjects = document.getElementById("subjects");
+    const addSubject = document.getElementById("addSubject");
+    const calculate = document.getElementById("calculate");
+    const error = document.getElementById("error");
+    const result = document.getElementById("result");
+    const average = document.getElementById("average");
+    const totalWeight = document.getElementById("totalWeight");
+
+    function updateWeight() {
+      const inputs = document.querySelectorAll(
+        ".subject-weight"
+      ) as NodeListOf<HTMLInputElement>;
+
+      let total = 0;
+
+      inputs.forEach((input) => {
+        if (input.value !== "") {
+          total += Number(input.value);
+        }
+      });
+
+      totalWeight.textContent =
+        total.toFixed(2).replace(".", ",") + "%";
+
+      if (Math.abs(total - 100) < 0.01) {
+        totalWeight.classList.add("complete");
+      } else {
+        totalWeight.classList.remove("complete");
+      }
+    }
+
+    function updateRemoveButtons() {
+      const buttons = document.querySelectorAll(".remove");
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const allSubjects = document.querySelectorAll(".subject");
+
+          if (allSubjects.length > 1) {
+            button.parentElement?.remove();
+            updateWeight();
+            error.textContent = "";
+          }
+        });
+      });
+    }
+
+    addSubject?.addEventListener("click", () => {
+      const subject = document.createElement("div");
+
+      subject.className = "subject";
+
+      subject.innerHTML = `
+        <input
+          type="text"
+          class="subject-name"
+          placeholder="Nombre de la asignatura"
+        />
+
+        <input
+          type="number"
+          class="subject-grade"
+          min="0"
+          max="10"
+          step="0.01"
+          placeholder="Nota"
+        />
+
+        <input
+          type="number"
+          class="subject-weight"
+          min="0"
+          max="100"
+          step="0.01"
+          placeholder="%"
+        />
+
+        <button type="button" class="remove">×</button>
+      `;
+
+      subjects?.appendChild(subject);
+
+      const weightInput = subject.querySelector(
+        ".subject-weight"
+      ) as HTMLInputElement;
+
+      weightInput.addEventListener("input", updateWeight);
+
+      updateRemoveButtons();
+    });
+
+    document.querySelectorAll(".subject-weight").forEach((input) => {
+      input.addEventListener("input", updateWeight);
+    });
+
+    calculate?.addEventListener("click", () => {
+      error.textContent = "";
+      result.classList.remove("show");
+
+      const gradeInputs = document.querySelectorAll(
+        ".subject-grade"
+      ) as NodeListOf<HTMLInputElement>;
+
+      const weightInputs = document.querySelectorAll(
+        ".subject-weight"
+      ) as NodeListOf<HTMLInputElement>;
+
+      let weightedTotal = 0;
+      let weightTotal = 0;
+
+      for (let i = 0; i < gradeInputs.length; i++) {
+        const gradeInput = gradeInputs[i];
+        const weightInput = weightInputs[i];
+
+        if (
+          gradeInput.value === "" ||
+          weightInput.value === ""
+        ) {
+          error.textContent =
+            "Introduce una nota y un porcentaje en todas las asignaturas.";
+
+          return;
+        }
+
+        const grade = Number(gradeInput.value);
+        const weight = Number(weightInput.value);
+
+        if (grade < 0 || grade > 10) {
+          error.textContent =
+            "Las notas deben estar entre 0 y 10.";
+
+          return;
+        }
+
+        if (weight < 0 || weight > 100) {
+          error.textContent =
+            "Los porcentajes deben estar entre 0 y 100.";
+
+          return;
+        }
+
+        weightedTotal += grade * (weight / 100);
+        weightTotal += weight;
+      }
+
+      if (Math.abs(weightTotal - 100) > 0.01) {
+        error.textContent =
+          `Los porcentajes deben sumar 100%. Actualmente suman ${weightTotal
+            .toFixed(2)
+            .replace(".", ",")}% .`;
+
+        return;
+      }
+
+      average.textContent = weightedTotal
+        .toFixed(2)
+        .replace(".", ",");
+
+      result.classList.add("show");
+    });
+
+    updateRemoveButtons();
+    updateWeight();
+  </script>
+
+  <style>
+    :global(*) {
+      box-sizing: border-box;
+    }
+
+    :global(body) {
+      margin: 0;
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    .header {
+      height: 72px;
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 7%;
+    }
+
+    .logo,
+    .footer-logo {
+      text-decoration: none;
+      color: #0f172a;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .logo span,
+    .footer-logo span {
+      color: #16a085;
+    }
+
+    .back {
+      color: #475569;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .back:hover {
+      color: #16a085;
+    }
+
+    main {
+      max-width: 850px;
+      margin: auto;
+      padding: 55px 20px 80px;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e8f8f5;
+      color: #12806a;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1.05;
+      margin: 0 0 16px;
+      letter-spacing: -1.5px;
+    }
+
+    .hero p {
+      color: #64748b;
+      font-size: 17px;
+      max-width: 620px;
+      margin: auto;
+      line-height: 1.6;
+    }
+
+    .calculator {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 8px 25px rgba(15, 23, 42, 0.04);
+    }
+
+    .card h2 {
+      margin: 0 0 20px;
+      font-size: 20px;
+    }
+
+    :global(.subject) {
+      display: grid;
+      grid-template-columns: 1fr 120px 110px 42px;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    :global(.subject input) {
+      width: 100%;
+      height: 48px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 0 13px;
+      font-size: 15px;
+      background: white;
+      outline: none;
+    }
+
+    :global(.subject input:focus) {
+      border-color: #16a085;
+      box-shadow: 0 0 0 3px rgba(22, 160, 133, 0.1);
+    }
+
+    :global(.subject .remove) {
+      width: 42px;
+      height: 48px;
+      border: 1px solid #fecaca;
+      background: #fff5f5;
+      color: #dc2626;
+      border-radius: 10px;
+      font-size: 23px;
+      cursor: pointer;
+    }
+
+    :global(.subject .remove:hover) {
+      background: #fee2e2;
+    }
+
+    .add {
+      border: 0;
+      background: #e8f8f5;
+      color: #12806a;
+      border-radius: 10px;
+      height: 45px;
+      padding: 0 18px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .add:hover {
+      background: #d8f2ec;
+    }
+
+    .weight-info {
+      margin-top: 18px;
+      padding: 13px 15px;
+      background: #f8fafc;
+      border-radius: 10px;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .weight-info strong {
+      color: #0f172a;
+    }
+
+    .weight-info strong.complete {
+      color: #16a085;
+    }
+
+    .calculate {
+      width: 100%;
+      height: 56px;
+      border: 0;
+      border-radius: 13px;
+      background: #16a085;
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(22, 160, 133, 0.2);
+    }
+
+    .calculate:hover {
+      background: #128f76;
+    }
+
+    .error {
+      min-height: 20px;
+      color: #dc2626;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .result {
+      display: none;
+      background: #0f172a;
+      color: white;
+      border-radius: 20px;
+      padding: 35px 25px;
+      text-align: center;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .result p {
+      color: #94a3b8;
+      margin: 0 0 10px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .result strong {
+      font-size: 58px;
+      line-height: 1;
+    }
+
+    .result span {
+      color: #94a3b8;
+      font-size: 15px;
+    }
+
+    .info {
+      margin-top: 50px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 30px;
+    }
+
+    .info h2 {
+      margin-top: 0;
+    }
+
+    .info p {
+      color: #64748b;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .formula {
+      background: #f8fafc;
+      border-left: 4px solid #16a085;
+      padding: 16px;
+      margin: 20px 0;
+      border-radius: 0 10px 10px 0;
+    }
+
+    .formula strong {
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    .formula span {
+      color: #475569;
+      font-size: 14px;
+    }
+
+    .example {
+      background: #e8f8f5;
+      color: #12806a;
+      padding: 16px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    footer {
+      border-top: 1px solid #e2e8f0;
+      background: white;
+      padding: 35px 20px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 22px;
+    }
+
+    footer p {
+      color: #64748b;
+      margin: 8px 0 20px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .footer-links a {
+      color: #64748b;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .footer-links a:hover {
+      color: #16a085;
+    }
+
+    footer small {
+      color: #94a3b8;
+    }
+
+    @media (max-width: 650px) {
+      .header {
+        padding: 0 20px;
+      }
+
+      :global(.subject) {
+        grid-template-columns: 1fr 1fr 42px;
+      }
+
+      :global(.subject .subject-name) {
+        grid-column: 1 / 3;
+      }
+
+      :global(.subject .subject-grade) {
+        grid-column: 1;
+      }
+
+      :global(.subject .subject-weight) {
+        grid-column: 2;
+      }
+
+      :global(.subject .remove) {
+        grid-column: 3;
+        grid-row: 2;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .info {
+        padding: 22px;
+      }
+    }
+  </style>
+</Layout>

@@ -1,0 +1,163 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Política de Cookies | NotaLab"
+  description="Consulta la política de cookies de NotaLab."
+>
+  <main class="legal">
+    <article>
+      <span class="eyebrow">NOTALAB</span>
+
+      <h1>Política de Cookies</h1>
+
+      <p class="intro">
+        Esta página explica qué son las cookies y cómo podrán utilizarse en
+        NotaLab.
+      </p>
+
+      <section>
+        <h2>1. ¿Qué son las cookies?</h2>
+
+        <p>
+          Las cookies son pequeños archivos que se almacenan en el dispositivo
+          del usuario cuando visita determinadas páginas web.
+        </p>
+
+        <p>
+          Pueden utilizarse para recordar información, analizar el uso de un
+          sitio web o proporcionar determinadas funcionalidades.
+        </p>
+      </section>
+
+      <section>
+        <h2>2. Cookies utilizadas por NotaLab</h2>
+
+        <p>
+          NotaLab está diseñado para que sus calculadoras puedan utilizarse sin
+          necesidad de crear una cuenta.
+        </p>
+
+        <p>
+          En la versión inicial del sitio no se utilizan cookies propias
+          necesarias para el funcionamiento de las calculadoras.
+        </p>
+      </section>
+
+      <section>
+        <h2>3. Cookies de terceros</h2>
+
+        <p>
+          NotaLab podrá utilizar servicios de terceros que puedan instalar
+          cookies u otras tecnologías similares.
+        </p>
+
+        <p>
+          Por ejemplo, si se incorpora Google Analytics para analizar el
+          tráfico del sitio o Google AdSense para mostrar publicidad, estos
+          servicios podrán utilizar tecnologías propias de acuerdo con sus
+          respectivas políticas.
+        </p>
+      </section>
+
+      <section>
+        <h2>4. Gestión de cookies</h2>
+
+        <p>
+          El usuario puede configurar su navegador para bloquear o eliminar
+          determinadas cookies.
+        </p>
+
+        <p>
+          La forma de gestionar estas opciones depende del navegador utilizado.
+        </p>
+      </section>
+
+      <section>
+        <h2>5. Actualización de esta política</h2>
+
+        <p>
+          Esta política podrá actualizarse cuando se incorporen nuevas
+          funcionalidades, herramientas de análisis o servicios publicitarios
+          al sitio web.
+        </p>
+      </section>
+    </article>
+  </main>
+</Layout>
+
+<style>
+  :global(body) {
+    margin: 0;
+    background: #f8fafc;
+    color: #0f172a;
+    font-family:
+      Inter,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+  }
+
+  .legal {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 70px 20px 100px;
+  }
+
+  article {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 45px;
+  }
+
+  .eyebrow {
+    color: #16a085;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+
+  h1 {
+    margin: 10px 0 18px;
+    font-size: clamp(36px, 6vw, 52px);
+    line-height: 1;
+    letter-spacing: -2px;
+  }
+
+  .intro {
+    color: #64748b;
+    font-size: 17px;
+    line-height: 1.7;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  section {
+    margin-top: 35px;
+  }
+
+  h2 {
+    margin: 0 0 12px;
+    font-size: 22px;
+  }
+
+  p {
+    color: #475569;
+    line-height: 1.8;
+    font-size: 15px;
+  }
+
+  @media (max-width: 600px) {
+    .legal {
+      padding: 40px 15px 70px;
+    }
+
+    article {
+      padding: 28px 22px;
+    }
+  }
+</style>

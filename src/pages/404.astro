@@ -1,0 +1,91 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Página no encontrada | NotaLab"
+  description="La página que buscas no existe en NotaLab."
+>
+  <main class="not-found">
+    <div class="content">
+      <span class="code">404</span>
+
+      <h1>Página no encontrada</h1>
+
+      <p>
+        Parece que la página que buscas no existe o ha sido movida.
+      </p>
+
+      <a href="/" class="button">
+        Volver a NotaLab
+      </a>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  :global(body) {
+    margin: 0;
+    background: #f8fafc;
+    color: #0f172a;
+    font-family:
+      Inter,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+  }
+
+  .not-found {
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 70px 20px;
+    text-align: center;
+  }
+
+  .content {
+    max-width: 550px;
+  }
+
+  .code {
+    display: block;
+    color: #16a085;
+    font-size: 90px;
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: -5px;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    margin: 0 0 15px;
+    font-size: 38px;
+    letter-spacing: -1.5px;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  .button {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 14px 22px;
+    background: #16a085;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 800;
+    transition: background 0.2s ease;
+  }
+
+  .button:hover {
+    background: #128f76;
+  }
+</style>

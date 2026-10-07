@@ -1,0 +1,149 @@
+---
+---
+
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="/" class="footer-logo">
+        <span>Nota</span>Lab
+      </a>
+
+      <p>
+        Herramientas gratuitas para estudiantes.
+      </p>
+    </div>
+
+    <div class="footer-links">
+      <div class="footer-column">
+        <h3>Calculadoras</h3>
+
+        <a href="/calculadora-nota-media">Nota media</a>
+        <a href="/media-ponderada">Media ponderada</a>
+        <a href="/calculadora-nota-necesaria">Nota necesaria</a>
+        <a href="/simulador-notas">Simulador de notas</a>
+        <a href="/calculadora-pau">Calculadora PAU</a>
+      </div>
+
+      <div class="footer-column">
+        <h3>NotaLab</h3>
+
+        <a href="/#sobre-notalab">Sobre NotaLab</a>
+        <a href="/contacto">Contacto</a>
+        <a href="/privacidad">Privacidad</a>
+        <a href="/cookies">Cookies</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 NotaLab. Todos los derechos reservados.</span>
+
+    <span>
+      Hecho para estudiantes
+    </span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: white;
+    border-top: 1px solid #e2e8f0;
+    padding: 50px 7% 25px;
+  }
+
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 70px;
+    padding-bottom: 40px;
+  }
+
+  .footer-brand {
+    min-width: 220px;
+  }
+
+  .footer-logo {
+    text-decoration: none;
+    color: #0f172a;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+  }
+
+  .footer-logo span {
+    color: #16a085;
+  }
+
+  .footer-brand p {
+    margin: 10px 0 0;
+    color: #64748b;
+    font-size: 14px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 80px;
+  }
+
+  .footer-column {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    min-width: 150px;
+  }
+
+  .footer-column h3 {
+    margin: 0 0 6px;
+    color: #0f172a;
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .footer-column a {
+    color: #64748b;
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s ease;
+  }
+
+  .footer-column a:hover {
+    color: #16a085;
+  }
+
+  .footer-bottom {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    color: #94a3b8;
+    font-size: 12px;
+  }
+
+  @media (max-width: 750px) {
+    .footer {
+      padding: 40px 20px 25px;
+    }
+
+    .footer-top {
+      flex-direction: column;
+      gap: 35px;
+    }
+
+    .footer-links {
+      gap: 40px;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footer-links {
+      flex-direction: column;
+      gap: 30px;
+    }
+  }
+</style>
